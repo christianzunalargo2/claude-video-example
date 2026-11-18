@@ -1,0 +1,7 @@
+node_modules/
+frames/
+*.log
+.DS_Store
+out/stills/
+out/*.log
+out/*.png

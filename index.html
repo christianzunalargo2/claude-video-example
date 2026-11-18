@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chimborazo · Ecuador's Highest Peak</title>
+    <link rel="stylesheet" href="node_modules/@fontsource/montserrat/700.css" />
+    <link rel="stylesheet" href="node_modules/@fontsource/montserrat/800.css" />
+    <link rel="stylesheet" href="node_modules/@fontsource/montserrat/900.css" />
+    <link rel="stylesheet" href="node_modules/@fontsource/inter/400.css" />
+    <link rel="stylesheet" href="node_modules/@fontsource/inter/500.css" />
+    <link rel="stylesheet" href="node_modules/@fontsource/inter/600.css" />
+    <link rel="stylesheet" href="node_modules/@fontsource/inter/700.css" />
+    <link rel="stylesheet" href="src/style.css" />
+    <script type="importmap">
+      { "imports": { "three": "./node_modules/three/build/three.module.js" } }
+    </script>
+  </head>
+  <body>
+    <div id="stage">
+      <canvas id="gl" width="1920" height="1080"></canvas>
+      <div id="overlay">
+        <div id="labels"></div>
+        <div class="scrim scrim-bottom"></div>
+        <div class="scrim scrim-left"></div>
+
+        <!-- 1 · hook -->
+        <section class="cap cap-hook" id="cap-1">
+          <div class="kicker anim" data-d="0">Ecuador · Andes · 1°28′ S</div>
+          <h1 class="title">
+            <span class="anim" data-d="0.10">C</span><span class="anim" data-d="0.14">H</span><span class="anim" data-d="0.18">I</span><span class="anim" data-d="0.22">M</span><span class="anim" data-d="0.26">B</span><span class="anim" data-d="0.30">O</span><span class="anim" data-d="0.34">R</span><span class="anim" data-d="0.38">A</span><span class="anim" data-d="0.42">Z</span><span class="anim" data-d="0.46">O</span>
+          </h1>
+          <p class="sub anim" data-d="0.7">Why is it the country’s highest mountain?</p>
+        </section>
+
+        <!-- 2 · the record -->
+        <section class="cap" id="cap-2">
+          <div class="kicker anim" data-d="0">The record · 6,263 m</div>
+          <h2 class="headline anim" data-d="0.08">Taller than every other peak in Ecuador</h2>
+          <p class="sub anim" data-d="0.2">366 m above Cotopaxi, its closest rival.</p>
+        </section>
+
+        <!-- 3 · tectonics -->
+        <section class="cap" id="cap-3">
+          <div class="kicker anim" data-d="0">Reason 1 · Plate tectonics</div>
+          <h2 class="headline anim" data-d="0.08">Nazca plate dives under South America</h2>
+          <p class="sub anim" data-d="0.2">Rising magma builds volcanoes on top of the already-high Andes.</p>
+        </section>
+
+        <!-- 4 · layers -->
+        <section class="cap" id="cap-4">
+          <div class="kicker anim" data-d="0">Reason 2 · Built in layers</div>
+          <h2 class="headline anim" data-d="0.08">Three volcanoes stacked into one</h2>
+          <p class="sub anim" data-d="0.2">~120,000 years of eruptions piled lava and ash ever higher.</p>
+        </section>
+
+        <!-- 5 · bonus -->
+        <section class="cap" id="cap-5">
+          <div class="kicker anim" data-d="0">Bonus · Earth’s bulge</div>
+          <h2 class="headline anim" data-d="0.08">The farthest point from Earth’s center</h2>
+          <p class="sub anim" data-d="0.2">The equator bulges, lifting its summit past Everest’s.</p>
+        </section>
+        <div class="footnote" id="note-5">
+          <span class="anim" data-d="0">Not to scale · Data: IGM–IRD 2016 survey; Samaniego et al. 2012</span>
+        </div>
+
+        <div id="hud">
+          <div class="brand" id="brand">Chimborazo <span>6,263 m</span></div>
+          <div class="chapter"><b id="chap">01</b><span> / 05</span></div>
+          <div class="progress"><i id="prog"></i></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

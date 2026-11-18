@@ -1,0 +1,189 @@
+:root {
+  --gold: #f4b942;
+  --ink: #f6f8fc;
+  --muted: rgba(232, 238, 248, 0.8);
+  --shadow: 0 2px 14px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+#stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #000;
+  transform-origin: 0 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+body.capture #stage { transform: none !important; }
+#gl { position: absolute; inset: 0; width: 1920px; height: 1080px; display: block; }
+#overlay, #labels, .label-layer { position: absolute; inset: 0; pointer-events: none; }
+
+.scrim { position: absolute; pointer-events: none; }
+.scrim-bottom {
+  left: 0; right: 0; bottom: 0; height: 430px;
+  background: linear-gradient(to top, rgba(3, 6, 14, 0.82) 0%, rgba(3, 6, 14, 0.45) 45%, rgba(3, 6, 14, 0) 100%);
+}
+.scrim-left {
+  left: 0; top: 0; bottom: 0; width: 900px;
+  background: linear-gradient(to right, rgba(3, 6, 14, 0.35), rgba(3, 6, 14, 0));
+}
+
+/* ---------- captions ---------- */
+.cap { position: absolute; left: 112px; bottom: 96px; width: 1500px; display: none; }
+.cap .anim, .footnote .anim { display: inline-block; opacity: 0; will-change: transform, opacity; }
+.cap .kicker, .cap .headline, .cap .sub { display: block; }
+.kicker {
+  font: 700 22px/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow: var(--shadow);
+}
+.kicker::before {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 3px;
+  margin-right: 16px;
+  vertical-align: middle;
+  background: var(--gold);
+  transform: translateY(-2px);
+}
+.headline {
+  margin: 18px 0 0;
+  font: 800 56px/1.08 'Montserrat', sans-serif;
+  letter-spacing: -0.01em;
+  text-shadow: var(--shadow);
+}
+.sub {
+  margin: 16px 0 0;
+  font: 400 31px/1.35 'Inter', sans-serif;
+  color: var(--muted);
+  text-shadow: var(--shadow);
+  max-width: 1060px;
+}
+.cap-hook { top: 330px; bottom: auto; }
+.title {
+  margin: 22px 0 0;
+  font: 900 128px/0.92 'Montserrat', sans-serif;
+  letter-spacing: 0.01em;
+  text-shadow: 0 6px 40px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+.title .anim { display: inline-block; }
+.cap-hook .sub { font-size: 38px; margin-top: 26px; color: #fff; }
+.footnote {
+  position: absolute;
+  right: 112px;
+  bottom: 44px;
+  display: none;
+  font: 500 17px/1 'Inter', sans-serif;
+  color: rgba(225, 232, 245, 0.55);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- HUD ---------- */
+#hud { position: absolute; inset: 0; pointer-events: none; }
+.brand {
+  position: absolute; left: 112px; top: 64px;
+  font: 800 24px/1 'Montserrat', sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-shadow: var(--shadow);
+  opacity: 0;
+}
+.brand span { color: var(--gold); margin-left: 10px; letter-spacing: 0.08em; }
+.chapter {
+  position: absolute; right: 112px; top: 62px;
+  font: 600 22px/1 'Inter', sans-serif;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-shadow: var(--shadow);
+  font-variant-numeric: tabular-nums;
+}
+.chapter b { color: var(--ink); font-weight: 700; }
+.progress { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(255, 255, 255, 0.12); }
+.progress i { position: absolute; inset: 0; background: var(--gold); transform-origin: 0 0; transform: scaleX(0); }
+
+/* ---------- 3D-pinned labels ---------- */
+.lbl { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform, opacity; }
+.lbl-inner { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.lbl-box { position: absolute; white-space: nowrap; text-shadow: var(--shadow); }
+
+/* pin: dot on the anchor, stem up to the text */
+.pin .lbl-inner::before {
+  content: ''; position: absolute; left: -1px; bottom: 0; width: 2px; height: 58px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.2));
+}
+.pin .lbl-inner::after {
+  content: ''; position: absolute; left: -6px; top: -6px; width: 12px; height: 12px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+}
+.pin .lbl-box { left: 0; bottom: 66px; transform: translateX(-50%); text-align: center; }
+.pin-kicker {
+  display: block;
+  font: 600 18px/1 'Inter', sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pin-value { display: block; margin-top: 8px; font: 800 44px/1 'Montserrat', sans-serif; font-variant-numeric: tabular-nums; }
+.pin-gold .pin-value { color: var(--gold); }
+.pin-gold .lbl-inner::before { background: linear-gradient(to top, var(--gold), rgba(244, 185, 66, 0.2)); }
+.pin-gold .lbl-inner::after { background: var(--gold); box-shadow: 0 0 0 5px rgba(244, 185, 66, 0.3); }
+
+/* peak names under the comparison mountains */
+.peak .lbl-box { left: 0; top: 14px; transform: translateX(-50%); text-align: center; }
+.peak-name { display: block; font: 700 22px/1 'Montserrat', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.peak-alt { display: block; margin-top: 8px; font: 600 32px/1 'Inter', sans-serif; font-variant-numeric: tabular-nums; }
+.peak-hero .peak-name { color: var(--gold); }
+.peak-hero .peak-alt { color: var(--gold); font-weight: 700; font-size: 38px; }
+.axis .lbl-box { right: 14px; top: 0; transform: translateY(-50%); font: 500 18px/1 'Inter', sans-serif; color: rgba(225, 232, 245, 0.75); font-variant-numeric: tabular-nums; }
+.record .lbl-box { right: 0; bottom: 12px; font: 800 30px/1 'Montserrat', sans-serif; color: var(--gold); }
+.diff .lbl-box { left: 16px; top: 0; transform: translateY(-50%); font: 800 34px/1 'Montserrat', sans-serif; color: var(--gold); }
+
+/* region tags on the tectonics cross-section */
+.tag .lbl-box {
+  left: 0; top: 0; transform: translate(-50%, -50%);
+  font: 700 21px/1 'Inter', sans-serif; letter-spacing: 0.16em; text-transform: uppercase;
+}
+.tag-water .lbl-box { color: #bfe3ff; transform: translate(-50%, -150%); }
+.tag-hot .lbl-box { color: #ffd48f; }
+
+/* callouts with a leader line to a fixed text column */
+.callout .lbl-inner::before {
+  content: ''; position: absolute; left: 0; top: -1px; height: 2px; width: var(--lead, 120px);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.35));
+}
+.callout .lbl-inner::after {
+  content: ''; position: absolute; left: -6px; top: -6px; width: 12px; height: 12px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+}
+.callout .lbl-box { left: calc(var(--lead, 120px) + 14px); top: 0; transform: translateY(-50%); display: flex; align-items: center; gap: 16px; }
+.co-num {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--gold); color: var(--gold); font: 800 22px/1 'Montserrat', sans-serif;
+}
+.co-text b { display: block; font: 800 30px/1.1 'Montserrat', sans-serif; }
+.co-text span { display: block; margin-top: 6px; font: 500 22px/1 'Inter', sans-serif; color: var(--muted); }
+
+/* globe labels */
+.side-left .lbl-box, .side-right .lbl-box { top: 0; transform: translateY(-50%); }
+.side-left .lbl-box { right: 20px; text-align: right; }
+.side-right .lbl-box { left: 20px; text-align: left; }
+.side-gold .pin-value { color: var(--gold); }
+.side-right.side-gold .lbl-box { transform: translateY(-22%); }
+.side-left.lift .lbl-box { transform: translateY(-75%); }
+.side-white .pin-value { color: #fff; }
+.eq-note .lbl-box { font: 700 18px/1 'Inter', sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+.center-note .lbl-box { left: 0; top: 18px; transform: translateX(-50%); font: 600 18px/1 'Inter', sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(225, 235, 250, 0.85); }
+.gap-note .lbl-box { left: 0; bottom: 34px; transform: translateX(-62%); font: 800 26px/1 'Montserrat', sans-serif; color: var(--gold); }
