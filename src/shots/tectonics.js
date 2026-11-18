@@ -1,7 +1,7 @@
 // Shot 3 (6–9 s): a cut-away block of the Ecuadorian margin.
 // The Nazca plate slides under South America, melts at depth and feeds the volcano.
 import * as THREE from 'three';
-import { smoothstep, clamp, lerp, ease, seg } from '../util.js';
+import { smoothstep, clamp, lerp, ease, seg, fract } from '../util.js';
 import { makeSkyDome, ASPECT, WIDTH, HEIGHT, LabelLayer, getGlowTexture, makeStrataTexture } from '../common.js';
 
 const D = 4; // block depth (z)
@@ -255,20 +255,20 @@ export function createTectonics(labelRoot) {
 
     // plates creep toward the trench
     chevrons.forEach((m) => {
-      const u = (m.userData.phase + t * 0.07) % 1;
+      const u = fract(m.userData.phase + t * 0.07);
       const pt = slab.curve.getPointAt(u);
       const tan = slab.curve.getTangentAt(u);
       m.position.set(pt.x, pt.y, FRONT + 0.016);
       m.rotation.z = Math.atan2(tan.y, tan.x);
       m.material.opacity = 0.85 * smoothstep(0, 0.06, u) * (1 - smoothstep(0.85, 1, u));
     });
-    arrow.position.x = -6.4 + ((t * 0.5) % 1) * 0.5;
+    arrow.position.x = -6.4 + fract(t * 0.5) * 0.5;
     arrow.material.opacity = 0.9 * seg(t, 0.1, 0.4);
 
     // magma: rises from the slab into a chamber, then up the conduit
     const flow = seg(t, 0.55, 1.4);
     particles.forEach((s) => {
-      const u = (s.userData.phase + t * 0.42) % 1;
+      const u = fract(s.userData.phase + t * 0.42);
       magmaPath(u, s.userData.wob, tmp);
       s.position.copy(tmp);
       const size = 0.24 + 0.1 * Math.sin(u * 20 + s.userData.wob * 9);

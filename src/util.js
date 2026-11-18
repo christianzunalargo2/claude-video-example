@@ -3,6 +3,8 @@
 
 export const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 export const lerp = (a, b, t) => a + (b - a) * t;
+/** Fractional part that stays in [0, 1) for negative inputs too. */
+export const fract = (x) => x - Math.floor(x);
 export const smoothstep = (a, b, x) => {
   const t = clamp((x - a) / (b - a));
   return t * t * (3 - 2 * t);
